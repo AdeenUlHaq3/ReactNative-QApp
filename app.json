@@ -23,7 +23,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.abc.qapp"
+    },
+    "android": {
+      "package": "com.abc.qapp"
     }
   }
 }
