@@ -5,6 +5,17 @@ import AppNavigator from './navigation/AppNavigator';
 import LoginScreen from './screens/LoginScreen';
 
 export default class App extends React.Component {
+  static navigationOptions = {
+    title: 'Home',
+    headerStyle: {
+      backgroundColor: '#555',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
+
   state = {
     isLoadingComplete: false,
     login: false,
@@ -20,11 +31,6 @@ export default class App extends React.Component {
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
-        !this.state.login ?
-        <LoginScreen 
-          onPress={this.login}
-        />
-        :
         <AppLoading
           startAsync={this._loadResourcesAsync}
           onError={this._handleLoadingError}
@@ -35,7 +41,15 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          {
+            !this.state.login 
+            ?
+            <LoginScreen
+              onPress={this.login}
+            />
+            :
+            <AppNavigator />
+          }
         </View>
       );
     }

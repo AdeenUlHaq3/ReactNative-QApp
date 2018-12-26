@@ -2,26 +2,15 @@ import React from 'react';
 import {
   Button,
   StyleSheet,
-  Alert,
   View
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { ListRow } from 'teaset';
 
 export default class LoginScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Home',
-    headerStyle: {
-      backgroundColor: '#555',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  };
-
-    login = async () => {
-      try {
-        const {
+  
+  login = async () => {
+    try {
+      const {
         type,
         token
       } = await Expo.Facebook.logInWithReadPermissionsAsync('2178541529074662');
@@ -41,13 +30,18 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <View>
-      <Ionicons name="md-checkmark-circle" size={100} color="#008080" />
-      <Button 
-        title='Login with FB'
-        onPress={this.login}
-      >
-        
-      </Button>
+        {/* <Button
+          title='Login with FB'
+          onPress={this.login}
+        >
+        </Button> */}
+        <ListRow
+          title='Swipe able'
+          swipeActions={[
+            <ListRow.SwipeActionButton title='Cancel' />,
+            <ListRow.SwipeActionButton title='Remove' type='danger' onPress={() => alert('Remove')} />,
+          ]}
+        />
       </View>
     );
   }
@@ -55,5 +49,5 @@ export default class LoginScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  
+
 });
