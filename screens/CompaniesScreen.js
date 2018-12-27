@@ -1,62 +1,78 @@
 import React from 'react';
-import { Modal, Text, View, Alert, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { Alert, StyleSheet, TextInput } from 'react-native';
+import { Container, View, Icon, Fab, Content, Form, Item, Input, Label } from 'native-base';
+import Modal from 'react-native-modal';
 
 export default class CompaniesScreen extends React.Component {
     state = {
-        modalVisible: false,
+        isModalVisible: false,
         text: ''
     };
 
-    setModalVisible = (visible) => {
-        this.setState({ modalVisible: visible });
-    }
-
-    static navigationOptions = {
-        title: 'Companies',
-        headerStyle: {
-            backgroundColor: '#555',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-            fontWeight: 'bold',
-        },
-    };
+    _toggleModal = () =>
+        this.setState({ isModalVisible: !this.state.isModalVisible });
 
     render() {
-        const { data } = this.state;
         return (
-            <View>
-                {
-                    this.state.modalVisible
-                    &&
-                    <View style={{ marginTop: 22 }}>
-                        <Modal
-                            animationType="slide"
-                            transparent={false}
-                            visible={this.state.modalVisible}
-                            onRequestClose={() => {
-                                Alert.alert('Modal has been closed.');
-                            }}>
-                            <TextInput
-                                style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                                onChangeText={(text) => this.setState({ text })}
-                                value={this.state.text}
-                            />
-                        </Modal>
-                    </View>
-                }
-                < TouchableOpacity onPress={() => {
-                    this.setModalVisible(true);
-                }} style={styles.fab}>
-                    <Text style={styles.fabIcon}>+</Text>
-                </TouchableOpacity>
-            </View>
+            <Container>
+                <View style={{ flex: 1 }}>
+                    <Fab
+                        style={{ backgroundColor: '#5067FF' }}
+                        position="bottomRight"
+                        onPress={this._toggleModal}>
+                        <Icon style={{}} name="person-add" />
+                    </Fab>
+                    {
+                        this.state.isModalVisible
+                        &&
+                        <View style={{ marginTop: 22 }}>
+                            <Modal
+                                isVisible={this.state.isModalVisible}
+                                backdropColor='white'
+                                style={styles.modalContent}
+                            >
+                                <View style={{
+                                    flex: 1,
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+                                    <View style={{
+                                        width: 300,
+                                        height: 300
+                                    }}>
+                                        <Form>
+                                            <Item stackedLabel last>
+                                                <Label>Username</Label>
+                                                <Input />
+                                            </Item>
+                                            <Item stackedLabel last>
+                                                <Label>Password</Label>
+                                                <Input />
+                                            </Item>
+                                        </Form>
+                                        <Fab
+                                            style={{ backgroundColor: '#5067FF' }}
+                                            position="bottomLeft"
+                                            onPress={this._toggleModal}>
+                                            <Icon name="close" />
+                                        </Fab>
+                                    </View>
+                                </View>
+                            </Modal>
+                        </View>
+                    }
+                </View>
+            </Container>
         )
     }
-
 }
 
 const styles = StyleSheet.create({
+    modalContent: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     container: {
         flex: 1,
     },
@@ -87,12 +103,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         right: 20,
         bottom: 20,
+        color: 'black',
         backgroundColor: '#03A9F4',
         borderRadius: 30,
         elevation: 8
     },
     fabIcon: {
         fontSize: 40,
-        color: 'white'
+        color: '#000'
     }
 });
