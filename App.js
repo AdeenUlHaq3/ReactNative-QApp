@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
-import CompaniesScreen from './screens/CompaniesScreen';
+import LoginScreen from './screens/LoginScreen';
 
 export default class App extends React.Component {
   static navigationOptions = {
@@ -44,7 +44,7 @@ export default class App extends React.Component {
           {
             !this.state.login 
             ?
-            <CompaniesScreen
+            <LoginScreen
               onPress={this.login}
             />
             :

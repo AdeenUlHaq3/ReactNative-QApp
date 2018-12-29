@@ -7,7 +7,7 @@ import {
 import { ListRow } from 'teaset';
 
 export default class LoginScreen extends React.Component {
-  
+
   login = async () => {
     try {
       const {
@@ -29,19 +29,26 @@ export default class LoginScreen extends React.Component {
 
   render() {
     return (
-      <View>
-        {/* <Button
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{ backgroundColor: '#ccc', flexDirection: 'column', flex: 0.2 }}></View>
+          {/* <Button
           title='Login with FB'
           onPress={this.login}
         >
         </Button> */}
-        <ListRow
+          {/* <ListRow
           title='Swipe able'
           swipeActions={[
             <ListRow.SwipeActionButton title='Cancel' />,
             <ListRow.SwipeActionButton title='Remove' type='danger' onPress={() => alert('Remove')} />,
           ]}
-        />
+        /> */}
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{ backgroundColor: '#ccc', flexDirection: 'row', flex: 0.4 }}></View>
+
+        </View>
       </View>
     );
   }
