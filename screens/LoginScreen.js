@@ -1,25 +1,34 @@
 import React from 'react';
 import {
-  Button,
   StyleSheet,
   View,
   Text
 } from 'react-native';
-// import { ListRow } from 'teaset';
+import { Button } from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import firebase from '../config/Firebase';
 
 export default class LoginScreen extends React.Component {
-
+  
   login = async () => {
     try {
       const {
         type,
-        token
-      } = await Expo.Facebook.logInWithReadPermissionsAsync('2178541529074662');
+        token,
+        expires,
+        permissions,
+        declinedPermissions,
+      } = await Expo.Facebook.logInWithReadPermissionsAsync('2178541529074662', {
+        permissions: ['public_profile'],
+      });
       if (type === 'success') {
         // Get the user's name using Facebook's Graph API
         // const response = await fetch(`https://graph.facebook.com/me?field=id,name,picture&access_token=${token}`);
         // Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
-        this.props.onPress();
+        const credential = firebase.auth.FacebookAuthProvider.credential(token);
+        firebase.auth().signInAndRetrieveDataWithCredential(credential)
+        .then(() => this.props.onPress())
+        .catch(error => console.log(error)) 
       } else {
         // type === 'cancel'
       }
@@ -31,7 +40,9 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, flexDirection: 'row' }}>
-        <View style={{ backgroundColor: '#ccc', flexDirection: 'column', flex: 0.2 }}></View>
+        <View style={{ backgroundColor: '#F0FFF0', flex: 1 }}>
+          <Text style={{ textAlign: 'center', fontSize: 30, color: '#BA55D3' }}>L{"\n"}O{"\n"}G{"\n"}I{"\n"}N</Text>
+        </View>
         {/* <ListRow
           title='Swipe able'
           swipeActions={[
@@ -39,27 +50,17 @@ export default class LoginScreen extends React.Component {
             <ListRow.SwipeActionButton title='Remove' type='danger' onPress={() => alert('Remove')} />,
           ]}
         /> */}
-        <View style={{ flex: 0.8, flexDirection: 'column' }}>
-          <View style={{ backgroundColor: '#333', flexDirection: 'row', flex: 0.25 }}>
-            <Text>Logo</Text>
-          </View>
-          <View style={{ backgroundColor: '#123', flexDirection: 'row', flex: 0.25 }}>
-            <Button
-              title='Login with FB'
-              onPress={this.login}
-              style={{ flex: 1, flexDirection: 'row' }}
-            >
-            </Button>
-          </View>
-          <View style={{ backgroundColor: '#345', flexDirection: 'row', flex: 0.25 }}>
-            <Text>App Details</Text>
-          </View>
-          <View style={{ backgroundColor: '#166', flexDirection: 'row', flex: 0.25 }}>
-            <Text>EXIT</Text>
-          </View>
+        <View style={{ flex: 4, backgroundColor: '#000' }}>
+          <Button
+            iconLeft
+            full
+            style={{ height: '100%', backgroundColor: '#BA55D3' }}
+            onPress={this.login}
+          >
+            <Icon name='facebook' style={{ fontSize: 100, color: '#F0FFF0' }} />
+          </Button>
         </View>
       </View>
-
     );
   }
 

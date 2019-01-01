@@ -1,6 +1,6 @@
 import React from 'react';
-import { Alert, StyleSheet, TextInput } from 'react-native';
-import { Container, View, Icon, Fab, Content, Form, Item, Input, Label } from 'native-base';
+import { Alert, StyleSheet } from 'react-native';
+import { Container, View, Icon, Fab, Form, Item, Input, Label } from 'native-base';
 import Modal from 'react-native-modal';
 
 export default class CompaniesScreen extends React.Component {
