@@ -1,16 +1,33 @@
 import React from 'react';
-import { Alert, StyleSheet } from 'react-native';
-import { Container, View, Icon, Fab, Form, Item, Input, Label } from 'native-base';
+import { StyleSheet, Image, Text } from 'react-native';
+import { Container, View, Icon, Fab, Form, Item, Input, Label, Button } from 'native-base';
 import Modal from 'react-native-modal';
+import { ImagePicker } from 'expo';
 
 export default class CompaniesScreen extends React.Component {
+    static navigationOptions = {
+        header: null
+    };
+
     state = {
+        text: '',
+        image: null,
         isModalVisible: false,
-        text: ''
     };
 
     _toggleModal = () =>
         this.setState({ isModalVisible: !this.state.isModalVisible });
+
+    _pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+        });
+
+        if (!result.cancelled) {
+            this.setState({ image: result.uri });
+        }
+    };
 
     render() {
         return (
@@ -20,7 +37,7 @@ export default class CompaniesScreen extends React.Component {
                         style={{ backgroundColor: '#5067FF' }}
                         position="bottomRight"
                         onPress={this._toggleModal}>
-                        <Icon style={{}} name="person-add" />
+                        <Icon style={{  }} name="person-add" />
                     </Fab>
                     {
                         this.state.isModalVisible
@@ -35,7 +52,6 @@ export default class CompaniesScreen extends React.Component {
                                     flex: 1,
                                     flexDirection: 'column',
                                     justifyContent: 'center',
-                                    alignItems: 'center'
                                 }}>
                                     <View style={{
                                         width: 300,
@@ -50,6 +66,12 @@ export default class CompaniesScreen extends React.Component {
                                                 <Label>Password</Label>
                                                 <Input />
                                             </Item>
+                                            <Button
+                                                onPress={this._pickImage}
+                                            ><Text>Ad</Text></Button>
+                                            {
+                                                this.state.image && <Image source={{ uri: this.state.image }} style={{ width: 200, height: 200 }} />
+                                            }
                                         </Form>
                                         <Fab
                                             style={{ backgroundColor: '#5067FF' }}

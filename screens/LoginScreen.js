@@ -2,14 +2,36 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  Text
+  Text,
+  Alert
 } from 'react-native';
 import { Button } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from '../config/Firebase';
 
 export default class LoginScreen extends React.Component {
-  
+  static navigationOptions = {
+    header: null  
+  };
+
+  saveLoginUserData = (userData) => {
+    console.log(userData);
+    
+    const {
+      id,
+      name,
+      picture
+    } = userData;
+
+    firebase.database().ref(`Users/${id}`)
+    .set({
+      id,
+      name,
+      picture
+    })
+    // this.props.navigation.navigate('Home')
+  }
+
   login = async () => {
     try {
       const {
@@ -23,11 +45,15 @@ export default class LoginScreen extends React.Component {
       });
       if (type === 'success') {
         // Get the user's name using Facebook's Graph API
-        // const response = await fetch(`https://graph.facebook.com/me?field=id,name,picture&access_token=${token}`);
-        // Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+        const response = await fetch(`https://graph.facebook.com/me?field=id,name,picture&access_token=${token}`);
+        
         const credential = firebase.auth.FacebookAuthProvider.credential(token);
         firebase.auth().signInAndRetrieveDataWithCredential(credential)
-        .then(() => this.props.onPress())
+        .then(() => {
+          console.log('t');
+          
+          this.saveLoginUserData(response.json());
+        })
         .catch(error => console.log(error)) 
       } else {
         // type === 'cancel'
@@ -40,9 +66,6 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, flexDirection: 'row' }}>
-        <View style={{ backgroundColor: '#F0FFF0', flex: 1 }}>
-          <Text style={{ textAlign: 'center', fontSize: 30, color: '#BA55D3' }}>L{"\n"}O{"\n"}G{"\n"}I{"\n"}N</Text>
-        </View>
         {/* <ListRow
           title='Swipe able'
           swipeActions={[
@@ -50,11 +73,11 @@ export default class LoginScreen extends React.Component {
             <ListRow.SwipeActionButton title='Remove' type='danger' onPress={() => alert('Remove')} />,
           ]}
         /> */}
-        <View style={{ flex: 4, backgroundColor: '#000' }}>
+        <View style={{ flex: 1, backgroundColor: '#000' }}>
           <Button
             iconLeft
             full
-            style={{ height: '100%', backgroundColor: '#BA55D3' }}
+            style={{ height: '100%', backgroundColor: '#000' }}
             onPress={this.login}
           >
             <Icon name='facebook' style={{ fontSize: 100, color: '#F0FFF0' }} />
