@@ -29,7 +29,7 @@ export default class LoginScreen extends React.Component {
       name,
       picture
     })
-    // this.props.navigation.navigate('Home')
+    .then(() => this.props.navigation.navigate('Home'));
   }
 
   login = async () => {
