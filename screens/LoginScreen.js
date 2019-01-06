@@ -2,9 +2,7 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  Text,
-  Alert,
-  Image
+  ImageBackground
 } from 'react-native';
 import { Button } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,7 +16,7 @@ export default class LoginScreen extends React.Component {
 
   saveLoginUserData = (userData) => {
     console.log(userData);
-
+    
     // const {
     //   id,
     //   name,
@@ -40,12 +38,12 @@ export default class LoginScreen extends React.Component {
         type,
         token
       } = await Expo.Facebook.logInWithReadPermissionsAsync('2178541529074662', {
-        permissions: ['public_profile'],
+        permissions: ['public_profile', 'email'],
       });
       if (type === 'success') {
         // Get the user's name using Facebook's Graph API
-        const response = await fetch(`https://graph.facebook.com/me?field=id,name,picture&access_token=${token}`);
-
+        const response = await fetch(`https://graph.facebook.com/me?fields=id,name,picture.type(large),email,about&access_token=${token}`);
+        
         const credential = firebase.auth.FacebookAuthProvider.credential(token);
         firebase.auth().signInAndRetrieveDataWithCredential(credential)
           .then(() => response.json())
@@ -61,22 +59,16 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        {/* <ListRow
-          title='Swipe able'
-          swipeActions={[
-            <ListRow.SwipeActionButton title='Cancel' />,
-            <ListRow.SwipeActionButton title='Remove' type='danger' onPress={() => alert('Remove')} />,
-          ]}
-        /> */}
-        <Image source={{ uri: logo }}/>
-          {/* <Button
+        <ImageBackground source={logo} style={{width: '100%', height: '100%', justifyContent: "flex-end"}}>
+          <Button
             iconLeft
             full
-            style={{ height: '100%', backgroundColor: '#000' }}
+            style={{ height: 70, backgroundColor: '#fff' }}
             onPress={this.login}
           >
-            <Icon name='facebook' style={{ fontSize: 100, color: '#F0FFF0' }} />
-          </Button> */}
+            <Icon name='facebook' style={{ fontSize: 50, color: '#000' }} />
+          </Button>
+          </ImageBackground>
       </View>
     );
   }
