@@ -2,12 +2,13 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  ImageBackground
+  ImageBackground,
+  Text
 } from 'react-native';
-import { Button } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from '../config/Firebase';
-import logo from '../assets/images/logo.png';
+import logo from '../assets/images/slider/1.png';
+import SwipeView from 'react-native-swipeview';
 
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -16,20 +17,20 @@ export default class LoginScreen extends React.Component {
 
   saveLoginUserData = (userData) => {
     console.log(userData);
-    
-    // const {
-    //   id,
-    //   name,
-    //   picture
-    // } = userData;
 
-    // firebase.database().ref(`Users/${id}`)
-    // .set({
-    //   id,
-    //   name,
-    //   picture
-    // })
-    // .then(() => this.props.navigation.navigate('Home'));
+    const {
+      id,
+      name,
+      picture
+    } = userData;
+
+    firebase.database().ref(`Users/${id}`)
+      .set({
+        id,
+        name,
+        picture
+      })
+      .then(() => this.props.navigation.navigate('Home'));
   }
 
   login = async () => {
@@ -43,7 +44,7 @@ export default class LoginScreen extends React.Component {
       if (type === 'success') {
         // Get the user's name using Facebook's Graph API
         const response = await fetch(`https://graph.facebook.com/me?fields=id,name,picture.type(large),email,about&access_token=${token}`);
-        
+
         const credential = firebase.auth.FacebookAuthProvider.credential(token);
         firebase.auth().signInAndRetrieveDataWithCredential(credential)
           .then(() => response.json())
@@ -59,16 +60,16 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <ImageBackground source={logo} style={{width: '100%', height: '100%', justifyContent: "flex-end"}}>
-          <Button
-            iconLeft
-            full
-            style={{ height: 70, backgroundColor: '#fff' }}
-            onPress={this.login}
-          >
-            <Icon name='facebook' style={{ fontSize: 50, color: '#000' }} />
-          </Button>
-          </ImageBackground>
+        <ImageBackground source={logo} style={{ width: '100%', height: '100%', justifyContent: "flex-end" }}>
+          <SwipeView
+            renderVisibleContent={() => <Icon style={styles.icon} name='facebook' />}
+            swipeToOpenPercent={100}
+            onSwipedLeft={this.login}
+            previewSwipeDemo={true}
+            disableSwipeToRight={true}
+            swipeDuration={100}
+          />
+        </ImageBackground>
       </View>
     );
   }
@@ -76,5 +77,12 @@ export default class LoginScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
+  icon: {
+    backgroundColor: 'whitesmoke',
+    padding: 15,
+    color: '#06f',
+    textAlign: 'center',
+    color: '#3C5A99',
+    fontSize: 50
+  }
 });
